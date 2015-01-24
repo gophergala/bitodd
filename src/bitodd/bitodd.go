@@ -2,6 +2,7 @@ package main
 
 import (
 	"bitodd/config"
+	"bitodd/twitter"
 	"bitodd/model"
 	"bitodd/pages"
 	"flag"
@@ -31,6 +32,9 @@ func main() {
 
 	// Start websocket hub
 	go model.Hub.Run()
+
+    // Start twitter streaming
+	go twitter.OpenStream()
 
 	// Static resources
 	router := pages.GetRouter()

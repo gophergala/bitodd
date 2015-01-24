@@ -4,7 +4,8 @@ import ()
 
 type Envelope struct {
 	Action string `json:"action"`
-	Info   *Info  `json:"hello"`
+	Info   *Info  `json:"info,omitempty"`
+	Tweet  *Tweet `json:"tweet,omitempty"`
 }
 
 // Info action
@@ -13,4 +14,15 @@ var INFO = "INFO"
 // Info payload
 type Info struct {
 	UserCount int `json:"user_count"`
+}
+
+// Tweet action
+var TWEET = "TWEET"
+
+// Tweet payload
+type Tweet struct {
+	Username string  `json:"username"`
+	Message  string  `json:"message"`
+	Lat      float64 `json:"lat"`
+	Long     float64 `json:"long"`
 }

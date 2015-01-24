@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/darkhelmet/twitterstream"
 	"log"
 )
 
@@ -47,7 +48,7 @@ func (h *hub) registerConnection(c *Connection) {
 	log.Println("Connection registered")
 
 	// Send info message to everybody
-	h.handleMessage(createInfoMessage(h))
+	postInfoMessage()
 }
 
 func (h *hub) closeConnection(c *Connection) {
@@ -55,7 +56,7 @@ func (h *hub) closeConnection(c *Connection) {
 	close(c.Send)
 
 	// Send info message to everybody
-	h.handleMessage(createInfoMessage(h))
+	postInfoMessage()
 }
 
 func (h *hub) handleMessage(msg *Envelope) {
@@ -71,10 +72,17 @@ func (h *hub) handleMessage(msg *Envelope) {
 	}
 }
 
-func createInfoMessage(hub *hub) *Envelope {
+func postInfoMessage() {
 	// Create info payload
-	info := &Info{UserCount: len(hub.connections)}
+	info := &Info{UserCount: len(Hub.connections)}
 
 	// Create message envelope
-	return &Envelope{Action: INFO, Info: info}
+	Hub.handleMessage(&Envelope{Action: INFO, Info: info})
+}
+
+func PostLocationTweet(tweet *twitterstream.Tweet) {
+
+	temp := &Tweet{Username: tweet.User.Name, Message: tweet.Text, Lat: tweet.Coordinates.Lat.Float64(), Long: tweet.Coordinates.Long.Float64()}
+
+	Hub.handleMessage(&Envelope{Action: TWEET, Tweet: temp})
 }
