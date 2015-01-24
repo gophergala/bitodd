@@ -2,6 +2,7 @@ package main
 
 import (
 	"bitodd/config"
+	"bitodd/model"
 	"bitodd/pages"
 	"flag"
 	"log"
@@ -27,6 +28,9 @@ func main() {
 	if err != nil {
 		log.Fatalln("Configuration error:", err)
 	}
+
+	// Start websocket hub
+	go model.Hub.Run()
 
 	// Static resources
 	router := pages.GetRouter()

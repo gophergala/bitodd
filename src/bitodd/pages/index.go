@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-const indexUrl = "/"
+const indexURL = "/"
 
 var indexTmpl = getTemplate("templates/index.html")
 

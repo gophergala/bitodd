@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"sync"
@@ -18,13 +17,13 @@ var (
 	fileLock           sync.Mutex
 )
 
-type config struct {
-	Port       string `json:"port"`
+type Config struct {
+	Port string `json:"port"`
 }
 
-var appConfig config
+var appConfig Config
 
-func GetConfig() *config {
+func GetConfig() *Config {
 	return &appConfig
 }
 
@@ -36,42 +35,42 @@ func Load(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
 		return errors.New("Cannot open datafile")
-	} else {
-		defer file.Close()
+	}
 
-		configFileLocation = filename
+	defer file.Close()
 
-		decoder := json.NewDecoder(file)
-		decErr := decoder.Decode(&appConfig)
-		if decErr != nil {
-			return errors.New("Error while decoding items: " + decErr.Error())
-		}
+	configFileLocation = filename
+
+	decoder := json.NewDecoder(file)
+	decErr := decoder.Decode(&appConfig)
+	if decErr != nil {
+		return errors.New("Error while decoding items: " + decErr.Error())
 	}
 
 	log.Println("Loaded config from file")
 	return nil
 }
 
-func Save() {
+func Save() error {
 
 	fileLock.Lock()
 	defer fileLock.Unlock()
 
 	file, err := os.Create(configFileLocation)
 	if err != nil {
-		log.Println("Cannot write config file")
-		return
+		return errors.New("Cannot create config file: " + err.Error())
 	}
 	defer file.Close()
 
 	b, err := json.MarshalIndent(appConfig, "", "  ")
 	if err != nil {
-		fmt.Println("error:", err)
+		return errors.New("Cannot marshal config json: " + err.Error())
 	}
 
 	_, err = file.Write(b)
 	if err != nil {
-		log.Println("Error while writing config:", err.Error())
-		return
+		return errors.New("Cannot write config file: " + err.Error())
 	}
+
+	return nil
 }

@@ -14,7 +14,8 @@ func GetRouter() *mux.Router {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc(indexUrl, indexHandler)
+	r.HandleFunc(indexURL, indexHandler)
+	r.HandleFunc(websocketURL, websocketHandler)
 
 	return r
 }
