@@ -21,6 +21,7 @@ with the following data:
 ### JS
 
 * JQuery
+* Raphaël
 
 ### CSS
 
