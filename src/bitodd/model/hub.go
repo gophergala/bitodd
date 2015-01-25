@@ -45,7 +45,7 @@ func (h *hub) Run() {
 func (h *hub) registerConnection(c *Connection) {
 	h.connections[c] = true
 
-	log.Println("Connection registered")
+	log.Printf("Connection register (count: %v)", len(h.connections))
 
 	// Send info message to everybody
 	postInfoMessage()
@@ -54,6 +54,8 @@ func (h *hub) registerConnection(c *Connection) {
 func (h *hub) closeConnection(c *Connection) {
 	delete(h.connections, c)
 	close(c.Send)
+
+    log.Printf("Connection close (count: %v)", len(h.connections))
 
 	// Send info message to everybody
 	postInfoMessage()

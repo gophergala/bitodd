@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	console.log("Document loaded");
+	log("Document loaded");
 
 	worldmap();
 
@@ -11,12 +11,31 @@ $(document).ready(function() {
 	}
 });
 
-var debug = true;
+var debug = false;
+var tweetCount = 0;
+var maxLength = 20;
+
+var intervalSeconds = 5;
+var seconds = 0;
+
+setInterval(function() {
+	updateTweetSpeed();
+}, intervalSeconds * 1000);
 
 function log(message) {
 	if (debug) {
 		console.log(message);
 	}
+}
+
+function updateTweetSpeed() {
+
+	seconds += intervalSeconds;
+
+	var hours = seconds / 3600;
+	var speed = Math.round(tweetCount / hours);
+
+	$("#tweet_speed").text(speed);
 }
 
 function initConnection() {
@@ -35,7 +54,9 @@ function initConnection() {
 	ws.onmessage = function(evt) {
 		var msg = JSON.parse(evt.data);
 		log("WS message received: " + evt.data);
-		if (msg.action == "TWEET") {
+		if (msg.action == "INFO") {
+			updateFollowers(msg.info);
+		} else if (msg.action == "TWEET") {
 			plotTweet(msg.tweet);
 		}
 	};
@@ -87,13 +108,39 @@ function get_xy(lat, lng) {
 }
 
 function plotTweet(tweet) {
+	tweetCount++;
+	$("#tweet_count").text(tweetCount);
+
 	var xy = get_xy(tweet.lat, tweet.long);
-	var loc_obj = paper.circle(xy.x, xy.y, 5).attr({
-		fill : "#ff0000",
-		stroke : 'white',
-		'stroke-width' : 1
-	}).scale(scale, scale, 0, 0);
+	var loc_obj = paper.circle(xy.x, xy.y, 5);
+	loc_obj.scale(scale, scale, 0, 0);
+	loc_obj.attr("fill", "#FF0000");
+	loc_obj.attr("stroke", "#FFFFFF");
+	loc_obj.attr("stroke-width", 1);
+	loc_obj.attr("opacity", 0);
 	loc_obj.x = xy.x;
 	loc_obj.y = xy.y;
-	location_set.push(loc_obj);
+
+	// Fade in
+	loc_obj.animate({
+		opacity : 1
+	}, 1000, function() {
+		location_set.push(this)
+	});
+
+	// Grow the array only to maxLength
+	if (location_set.length > maxLength) {
+		var item = location_set.items.splice(0, 1);
+
+		// Fade out
+		item[0].animate({
+			opacity : 0
+		}, 1000, function() {
+			this.remove()
+		});
+	}
+}
+
+function updateFollowers(info) {
+	$("#user_count").text(info.user_count);
 }

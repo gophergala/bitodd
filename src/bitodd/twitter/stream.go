@@ -39,11 +39,11 @@ func OpenStream() {
 		log.Fatalln("Error while loading credentials", err)
 	}
 
-	keywords := "twitter"
+	keywords := []string{"twitter"}
 
 	for {
-		log.Printf("tracking keywords %s", keywords)
-		conn, err := client.Track(keywords)
+		log.Printf("Started streaming keywords: %s", keywords)
+		conn, err := client.Track(keywords...)
 		if err != nil {
 			log.Printf("Tracking failed: %s", err)
 			wait = wait << 1
@@ -60,9 +60,11 @@ func OpenStream() {
 func decodeTweets(conn *twitterstream.Connection) {
 	for {
 		if tweet, err := conn.Next(); err == nil {
+
 			// Use only tweets with coordinates
 			if tweet.Coordinates != nil {
 				model.PostLocationTweet(tweet)
+			} else {
 			}
 
 		} else {

@@ -1,7 +1,14 @@
 {{ define "content" }}
 
-<h1>World tweet map</h1>
+<div class="row">
+  <h1>Realtime tweet map</h1>
+</div>
 
-<div id="map"></div>
+<div id="map" class="row"></div>
+
+<div class="row">
+  <p class="u-pull-left"><span id="user_count">0</span> live follower(s), <span id="tweet_count">0</span> tweet(s)</p>
+  <p class="u-pull-right"><span id="tweet_speed">0</span> tweets/hour</p>
+</div>
 
 {{ end }}

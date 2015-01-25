@@ -13,6 +13,18 @@ type Connection struct {
 	Send chan *Envelope
 }
 
+func (c *Connection) Reader() {
+	for {
+		msg := &Envelope{}
+		err := c.Ws.ReadJSON(msg)
+		if err != nil {
+			log.Println("Error while reading json", err)
+			break
+		}
+	}
+	c.Ws.Close()
+}
+
 func (c *Connection) Writer() {
 	for message := range c.Send {
 		err := c.Ws.WriteJSON(message)
