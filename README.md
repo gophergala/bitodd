@@ -10,20 +10,20 @@ with the following data:
 3. Access Token
 4. Access Token Secret
 
-## Libraried used
+## Libraries used
 
 ### Go
 
-* github.com/gorilla/mux
-* github.com/gorilla/websocket
-* github.com/darkhelmet/twitterstream
+* [github.com/gorilla/mux](https://github.com/gorilla/mux)
+* [github.com/gorilla/websocket](https://github.com/gorilla/websocket)
+* [github.com/darkhelmet/twitterstream](https://github.com/darkhelmet/twitterstream)
 
 ### JS
 
-* JQuery
-* Raphaël
+* [JQuery](https://jquery.com/)
+* [Raphaël](http://raphaeljs.com/)
 
 ### CSS
 
-* Skeleton
-* Normalize
+* [Skeleton](http://getskeleton.com/)
+* [Normalize](http://git.io/normalize)
