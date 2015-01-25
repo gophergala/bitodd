@@ -8,6 +8,7 @@ $(document).ready(function() {
 		initConnection();
 	} else {
 		log("WS not supported");
+		$("#error").show();
 	}
 });
 
