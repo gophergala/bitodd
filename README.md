@@ -18,6 +18,12 @@ contain four rows with the following data:
 3. Access Token
 4. Access Token Secret
 
+Once you have the CREDENTIALS file in place, you can start the server with:
+
+```
+$ bin/bitodd
+```
+
 ## Libraries used
 
 ### Go
