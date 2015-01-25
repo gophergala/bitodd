@@ -21,8 +21,10 @@ var TWEET = "TWEET"
 
 // Tweet payload
 type Tweet struct {
-	Username string  `json:"username"`
-	Message  string  `json:"message"`
-	Lat      float64 `json:"lat"`
-	Long     float64 `json:"long"`
+	Picture     string  `json:"picture"`
+	DisplayName string  `json:"display_name"`
+	ScreenName  string  `json:"screen_name"`
+	Message     string  `json:"message"`
+	Lat         float64 `json:"lat"`
+	Long        float64 `json:"long"`
 }

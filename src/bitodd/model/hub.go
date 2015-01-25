@@ -55,7 +55,7 @@ func (h *hub) closeConnection(c *Connection) {
 	delete(h.connections, c)
 	close(c.Send)
 
-    log.Printf("Websocket close (count: %v)", len(h.connections))
+	log.Printf("Websocket close (count: %v)", len(h.connections))
 
 	// Send info message to everybody
 	postInfoMessage()
@@ -84,7 +84,7 @@ func postInfoMessage() {
 
 func PostLocationTweet(tweet *twitterstream.Tweet) {
 
-	temp := &Tweet{Username: tweet.User.Name, Message: tweet.Text, Lat: tweet.Coordinates.Lat.Float64(), Long: tweet.Coordinates.Long.Float64()}
+	temp := &Tweet{Picture: tweet.User.ProfileImageUrl, DisplayName: tweet.User.Name, ScreenName: tweet.User.ScreenName, Message: tweet.Text, Lat: tweet.Coordinates.Lat.Float64(), Long: tweet.Coordinates.Long.Float64()}
 
 	Hub.handleMessage(&Envelope{Action: TWEET, Tweet: temp})
 }

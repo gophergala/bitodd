@@ -1,3 +1,7 @@
+{{ define "head" }}
+<title>Realtime tweet map</title>
+{{ end }}
+
 {{ define "content" }}
 
 <div id="error" class="row error hidden">
@@ -17,6 +21,10 @@
 <div class="row">
   <p class="u-pull-left"><span id="user_count">-</span> live follower(s), <span id="tweet_count">-</span> tweet(s)</p>
   <p class="u-pull-right"><span id="tweet_speed">-</span> tweets/hour</p>
+</div>
+
+<h2>Tweets</h2>
+<div id="tweets">
 </div>
 
 {{ end }}

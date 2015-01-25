@@ -76,6 +76,7 @@ function initConnection() {
 			updateFollowers(msg.info);
 		} else if (msg.action == "TWEET") {
 			plotTweet(msg.tweet);
+			addTweet(msg.tweet);
 		}
 	};
 	ws.onclose = function() {
@@ -181,4 +182,55 @@ function fadeOut(item) {
 function disconnect() {
 	$("#user_count").text("-");
 	$("#tweet_speed").text("-");
+}
+
+function addTweet(data) {
+	var tweets = $("#tweets");
+
+	// Tweet container
+	var tweet = $("<div/>");
+	tweet.attr("v", 1);
+	tweet.addClass("row");
+	tweet.hide();
+
+	var pictureContainer = $("<div/>");
+	pictureContainer.addClass("one column");
+	pictureContainer.appendTo(tweet);
+
+	var textContainer = $("<div/>");
+	textContainer.addClass("eleven columns");
+	textContainer.appendTo(tweet);
+
+	var image = $("<img/>");
+	image.attr("src", data.picture);
+	image.addClass("image");
+	image.appendTo(pictureContainer);
+
+	var nameRow = $("<div/>");
+	nameRow.addClass("row");
+	nameRow.appendTo(textContainer);
+
+	var screenName = $("<a/>");
+	screenName.attr("href", "https://twitter.com/" + data.screen_name);
+	screenName.text(data.display_name);
+	screenName.appendTo(nameRow);
+
+	var tweetRow = $("<div/>");
+	tweetRow.addClass("row");
+	tweetRow.text(data.message);
+	tweetRow.appendTo(textContainer);
+
+	tweets.prepend(tweet);
+	tweet.fadeIn("slow");
+
+	// Show only maxLength tweets
+	var children = $("#tweets div[v='1']");
+	var overLimit = children.length - maxLength;
+	if (overLimit > 0) {
+		var removed = children.slice(-overLimit);
+		removed.attr("v", 0);
+		removed.fadeOut("slow", function() {
+			this.remove()
+		});
+	}
 }
