@@ -1,6 +1,7 @@
 package twitter
 
 import (
+	"bitodd/config"
 	"bitodd/model"
 	"errors"
 	"github.com/darkhelmet/twitterstream"
@@ -39,9 +40,8 @@ func OpenStream() {
 		log.Fatalln("Error while loading credentials", err)
 	}
 
-	keywords := []string{"twitter"}
-
 	for {
+		keywords := config.GetConfig().Keywords
 		log.Printf("Started streaming keywords: %s", keywords)
 		conn, err := client.Track(keywords...)
 		if err != nil {

@@ -18,7 +18,8 @@ var (
 )
 
 type Config struct {
-	Port string `json:"port"`
+	Port     string   `json:"port"`
+	Keywords []string `json:"keywords"`
 }
 
 var appConfig Config
