@@ -10,14 +10,9 @@ type TemplateModel struct {
 	Params   map[interface{}]interface{}
 }
 
-func noescape(text string) template.HTML {
-	return template.HTML(text)
-}
-
 func GetTemplateBase(name string) *template.Template {
 
-	f := template.FuncMap{"Noescape": noescape}
-	t := template.New(filepath.Base(name)).Funcs(f)
+	t := template.New(filepath.Base(name))
 
 	return t
 }
@@ -32,9 +27,4 @@ func RenderTemplate(tmpl *template.Template, w http.ResponseWriter, model *Templ
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
-}
-
-// Redirect
-func Redirect(w http.ResponseWriter, r *http.Request, url string) {
-	http.Redirect(w, r, url, http.StatusFound)
 }

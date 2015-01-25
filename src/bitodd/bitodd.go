@@ -23,7 +23,7 @@ func init() {
 
 func main() {
 
-	// Parse config
+	// Load config file
 	log.Println("Loading config from", configFileLocation)
 	err := config.Load(configFileLocation)
 	if err != nil {

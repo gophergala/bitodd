@@ -25,7 +25,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	c := &model.Connection{Send: make(chan *model.Envelope, 256), Ws: ws}
 	model.Hub.Register <- c
 	defer func() { model.Hub.Unregister <- c }()
-	// Block this handler so that the websocket connection remains open
 	go c.Writer()
+	// Block this handler so that the websocket connection remains open
 	c.Reader()
 }
