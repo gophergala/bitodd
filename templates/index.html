@@ -4,11 +4,15 @@
   <h1>Realtime tweet map</h1>
 </div>
 
+<div class="row">
+<p>This page shows realtime tweets for the following keyword(s): {{range .Params.Keywords }} <strong>{{.}}</strong> {{end}}</p>
+</div>
+
 <div id="map" class="row"></div>
 
 <div class="row">
-  <p class="u-pull-left"><span id="user_count">0</span> live follower(s), <span id="tweet_count">0</span> tweet(s)</p>
-  <p class="u-pull-right"><span id="tweet_speed">0</span> tweets/hour</p>
+  <p class="u-pull-left"><span id="user_count">-</span> live follower(s), <span id="tweet_count">-</span> tweet(s)</p>
+  <p class="u-pull-right"><span id="tweet_speed">-</span> tweets/hour</p>
 </div>
 
 {{ end }}

@@ -11,6 +11,17 @@ $(document).ready(function() {
 	}
 });
 
+var resizeTimer;
+$(window).resize(function() {
+	clearTimeout(resizeTimer);
+	resizeTimer = setTimeout(redraw, 100);
+})
+
+function redraw() {
+	paper.remove();
+	worldmap();
+};
+
 var debug = false;
 var tweetCount = 0;
 var maxLength = 20;
@@ -18,9 +29,7 @@ var maxLength = 20;
 var intervalSeconds = 5;
 var seconds = 0;
 
-setInterval(function() {
-	updateTweetSpeed();
-}, intervalSeconds * 1000);
+var interval;
 
 function log(message) {
 	if (debug) {
@@ -30,10 +39,14 @@ function log(message) {
 
 function updateTweetSpeed() {
 
-	seconds += intervalSeconds;
+	var speed = 0;
 
-	var hours = seconds / 3600;
-	var speed = Math.round(tweetCount / hours);
+	if (tweetCount > 0) {
+		seconds += intervalSeconds;
+
+		var hours = seconds / 3600;
+		speed = Math.round(tweetCount / hours);
+	}
 
 	$("#tweet_speed").text(speed);
 }
@@ -50,6 +63,10 @@ function initConnection() {
 	var ws = new WebSocket(wsUrl);
 	ws.onopen = function() {
 		log("WS connection opened");
+		updateTweetSpeed();
+		interval = setInterval(function() {
+			updateTweetSpeed();
+		}, intervalSeconds * 1000);
 	};
 	ws.onmessage = function(evt) {
 		var msg = JSON.parse(evt.data);
@@ -61,7 +78,12 @@ function initConnection() {
 		}
 	};
 	ws.onclose = function() {
-		log("WS connection close");
+		log("WS connection closed");
+		clearInterval(interval);
+		disconnect();
+		setTimeout(function() {
+			initConnection();
+		}, 60000);
 	};
 }
 
@@ -122,25 +144,40 @@ function plotTweet(tweet) {
 	loc_obj.y = xy.y;
 
 	// Fade in
-	loc_obj.animate({
-		opacity : 1
-	}, 1000, function() {
-		location_set.push(this)
-	});
+	fadeIn(loc_obj);
 
 	// Grow the array only to maxLength
 	if (location_set.length > maxLength) {
 		var item = location_set.items.splice(0, 1);
 
 		// Fade out
-		item[0].animate({
-			opacity : 0
-		}, 1000, function() {
-			this.remove()
-		});
+		fadeOut(item[0]);
 	}
 }
 
 function updateFollowers(info) {
 	$("#user_count").text(info.user_count);
+}
+
+// Fade in
+function fadeIn(item) {
+	item.animate({
+		opacity : 1
+	}, 1000, function() {
+		location_set.push(this)
+	});
+}
+
+// Fade out
+function fadeOut(item) {
+	item.animate({
+		opacity : 0
+	}, 1000, function() {
+		this.remove()
+	});
+}
+
+function disconnect() {
+	$("#user_count").text("-");
+	$("#tweet_speed").text("-");
 }
